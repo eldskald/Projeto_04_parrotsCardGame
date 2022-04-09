@@ -72,7 +72,7 @@ function selecionarCarta (cartaNum) {
         cartaDiv.classList.add("virando");
         cartaDiv.classList.add("selecionada");
         cartaDiv.classList.remove("virada");
-        setTimeout(terminarVirar, 200, cartaNum);
+        setTimeout(terminarVirar, 220, cartaNum);
     }
 }
 
@@ -80,7 +80,7 @@ function terminarVirar (cartaNum) {
     const cartaDiv = document.querySelectorAll(".carta")[cartaNum];
     cartaDiv.innerHTML = `<img src="${cartaFrente[cartas[cartaNum].tipo]}" />`;
     cartaDiv.classList.remove("virando");
-    setTimeout(deselecionarCarta, 1200, cartaNum);
+    setTimeout(deselecionarCarta, 1220, cartaNum);
 }
 
 function deselecionarCarta (cartaNum) {
