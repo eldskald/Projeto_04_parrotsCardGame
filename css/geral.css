@@ -26,7 +26,37 @@ body {
     margin-top: 64px;
 
     display: flex;
-    flex: row wrap;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.carta {
+    width: 116px;
+    height: 152px;
+    margin: 48px 16px;
+
+    padding: 16px;
+    display: flex;
     justify-content: center;
     align-items: center;
+
+    background-color: #a7e9af;
+    border: 1px solid #121212;
+    border-radius: 16px;
+    box-shadow: 4px 4px 4px #606060;
+    transition: all 0.2s ease-in-out;
+}
+
+.virada:hover, .selecionada {
+    transform: scale(1.2, 1.2);
+}
+
+.virando {
+    transform: scale(0, 1.2);
+}
+
+.carta > img {
+    width: 100%;
+    object-fit: cover;
 }
