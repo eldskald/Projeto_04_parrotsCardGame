@@ -82,9 +82,30 @@ function terminarDesvirar (cartaNum) {
     
     const outra = checarOutraSelecionada(cartaNum);
     if (outra !== null) {
-        setTimeout(deselecionarCarta, 1220, cartaNum);
-        setTimeout(deselecionarCarta, 1220, outra);
+        if (cartas[cartaNum].tipo === cartas[outra].tipo) {
+            setTimeout(deselecionarCarta, 1220, cartaNum);
+            setTimeout(deselecionarCarta, 1220, outra);
+        }
+        else {
+            setTimeout(comecarVirar, 1220, outra);
+            setTimeout(comecarVirar, 1220, cartaNum);
+        }
     }
+}
+
+function comecarVirar (cartaNum) {
+    const cartaDiv = document.querySelectorAll(".carta")[cartaNum];
+    cartaDiv.classList.add("virando");
+    setTimeout(terminarVirar, 220, cartaNum);
+}
+
+function terminarVirar (cartaNum) {
+    const cartaDiv = document.querySelectorAll(".carta")[cartaNum];
+    cartas[cartaNum].estado = "virada";
+    cartaDiv.innerHTML = `<img src="${cartaCostas}" />`;
+    cartaDiv.classList.remove("virando");
+    cartaDiv.classList.remove("selecionada");
+    cartaDiv.classList.add("virada");
 }
 
 function deselecionarCarta (cartaNum) {
