@@ -65,29 +65,64 @@ function renderizarCarta (carta) {
 
 // Funções ligadas ao clicar as cartas ////////////////////////////////////////////////////////////
 function selecionarCarta (cartaNum) {
-    if (cartas[cartaNum].estado === "virada") {
-        cartas[cartaNum].estado = "desvirada";
-        
+    if (cartas[cartaNum].estado === "virada" && podeSelecionar()) {
+        cartas[cartaNum].estado = "selecionada";
         const cartaDiv = document.querySelectorAll(".carta")[cartaNum];
         cartaDiv.classList.add("virando");
         cartaDiv.classList.add("selecionada");
         cartaDiv.classList.remove("virada");
-        setTimeout(terminarVirar, 220, cartaNum);
+        setTimeout(terminarDesvirar, 220, cartaNum);
     }
 }
 
-function terminarVirar (cartaNum) {
+function terminarDesvirar (cartaNum) {
     const cartaDiv = document.querySelectorAll(".carta")[cartaNum];
     cartaDiv.innerHTML = `<img src="${cartaFrente[cartas[cartaNum].tipo]}" />`;
     cartaDiv.classList.remove("virando");
-    setTimeout(deselecionarCarta, 1220, cartaNum);
+    
+    const outra = checarOutraSelecionada(cartaNum);
+    if (outra !== null) {
+        setTimeout(deselecionarCarta, 1220, cartaNum);
+        setTimeout(deselecionarCarta, 1220, outra);
+    }
 }
 
 function deselecionarCarta (cartaNum) {
     const cartaDiv = document.querySelectorAll(".carta")[cartaNum];
+    cartas[cartaNum].estado = "desvirada";
     cartaDiv.classList.remove("selecionada");
 }
 // Funções ligadas ao clicar as cartas ////////////////////////////////////////////////////////////
+
+
+
+// Funções de suporte /////////////////////////////////////////////////////////////////////////////
+
+function checarOutraSelecionada (num) {
+    let outra = null;
+    for (let i = 0; i < cartas.length; i++) {
+        if (cartas[i].estado === "selecionada" && i !== num) {
+            outra = i;
+        }
+    }
+    return outra;
+}
+
+function podeSelecionar () {
+    const total = document.querySelectorAll(".carta.selecionada").length;
+    return total <= 1;
+}
+
+function contarViradas () {
+    let total = 0;
+    for (let i = 0; i < cartas.length; i++) {
+        if (cartas[i].estado === "virada") {
+            total++;
+        }
+    }
+    return total;
+}
+// Funções de suporte /////////////////////////////////////////////////////////////////////////////
 
 
 
