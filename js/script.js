@@ -1,5 +1,6 @@
 
 const container = document.querySelector(".container");
+const contador = document.querySelector(".contador");
 const cartaCostas = "img/front.png";
 const cartaFrente = ["img/bobrossparrot.gif",
     "img/explodyparrot.gif", "img/fiestaparrot.gif", "img/metalparrot.gif",
@@ -7,14 +8,18 @@ const cartaFrente = ["img/bobrossparrot.gif",
 
 let cartas = [];
 let numeroDeJogadas = 0;
+let tempo = 0;
+let tempoIntervalo;
 
 
 
 // Funções ligadas a gerar o jogo /////////////////////////////////////////////////////////////////
 function iniciarJogo () {
     container.innerHTML = "";
+    contador.innerHTML = "";
     cartas = [];
     numeroDeJogadas = 0;
+    tempo = 0;
 
     let totalCartas = prompt("Com quantas cartas quer jogar?");
     while (!(totalCartas >= 4 && totalCartas <= 14 && totalCartas % 2 == 0)) {
@@ -23,6 +28,7 @@ function iniciarJogo () {
     }
     gerarCartas(totalCartas);
     renderizarJogo();
+    iniciarCronometro();
 }
 
 function gerarCartas (num) {
@@ -127,7 +133,6 @@ function deselecionarCarta (cartaNum) {
 
 
 // Funções de suporte /////////////////////////////////////////////////////////////////////////////
-
 function checarOutraSelecionada (num) {
     let outra = null;
     for (let i = 0; i < cartas.length; i++) {
@@ -149,7 +154,8 @@ function contarViradas () {
 }
 
 function fimDeJogo () {
-    alert(`Você ganhou com ${numeroDeJogadas} jogadas!`);
+    pararCronometro();
+    alert(`Você ganhou com ${numeroDeJogadas} jogadas e ${tempo} segundos!`);
     let resposta = prompt("Jogar novamente?");
     while (resposta !== "sim" && resposta !== "não") {
         alert("Responda com 'sim' ou 'não', minúsculo e acentuação correta.");
@@ -160,6 +166,24 @@ function fimDeJogo () {
     }
 }
 // Funções de suporte /////////////////////////////////////////////////////////////////////////////
+
+
+
+// Funções do contador de tempo ///////////////////////////////////////////////////////////////////
+function iniciarCronometro () {
+    tempoIntervalo = setInterval(atualizarCronometro, 1000);
+    contador.innerHTML = "0s"
+}
+
+function pararCronometro () {
+    clearInterval(tempoIntervalo);
+}
+
+function atualizarCronometro () {
+    tempo++;
+    contador.innerHTML = `${tempo}s`;
+}
+// Funções do contador de tempo ///////////////////////////////////////////////////////////////////
 
 
 
