@@ -6,6 +6,7 @@ const cartaFrente = ["img/bobrossparrot.gif",
     "img/revertitparrot.gif", "img/tripletsparrot.gif", "img/unicornparrot.gif"];
 
 let cartas = [];
+let numeroDeJogadas = 0;
 
 
 
@@ -17,6 +18,7 @@ function iniciarJogo () {
         totalCartas = prompt("Com quantas cartas quer jogar?");
     }
 
+    numeroDeJogadas = 0;
     gerarCartas(totalCartas);
     renderizarJogo();
 }
@@ -29,7 +31,7 @@ function gerarCartas (num) {
     }
     arr.sort(comparador);
     for (let i = 0; i < num; i++) {
-        cartas.push({tipo: arr[i], estado: "virada", numero: i});
+        cartas.push({tipo: arr[i], estado: "virada", numero: i, promessa: null});
     }
 }
 
@@ -65,13 +67,15 @@ function renderizarCarta (carta) {
 
 // Funções ligadas ao clicar as cartas ////////////////////////////////////////////////////////////
 function selecionarCarta (cartaNum) {
-    if (cartas[cartaNum].estado === "virada" && podeSelecionar()) {
+    if (cartas[cartaNum].estado === "virada") {
+        numeroDeJogadas++;
         cartas[cartaNum].estado = "selecionada";
         const cartaDiv = document.querySelectorAll(".carta")[cartaNum];
         cartaDiv.classList.add("virando");
         cartaDiv.classList.add("selecionada");
         cartaDiv.classList.remove("virada");
-        setTimeout(terminarDesvirar, 220, cartaNum);
+        clearTimeout(cartas[cartaNum].promessa);
+        cartas[cartaNum].promessa = setTimeout(terminarDesvirar, 220, cartaNum);
     }
 }
 
@@ -79,16 +83,22 @@ function terminarDesvirar (cartaNum) {
     const cartaDiv = document.querySelectorAll(".carta")[cartaNum];
     cartaDiv.innerHTML = `<img src="${cartaFrente[cartas[cartaNum].tipo]}" />`;
     cartaDiv.classList.remove("virando");
-    
     const outra = checarOutraSelecionada(cartaNum);
     if (outra !== null) {
         if (cartas[cartaNum].tipo === cartas[outra].tipo) {
-            setTimeout(deselecionarCarta, 1220, cartaNum);
-            setTimeout(deselecionarCarta, 1220, outra);
+            cartas[cartaNum].estado = "desvirada";
+            cartas[outra].estado = "desvirada";
+            cartas[cartaNum].promessa = setTimeout(deselecionarCarta, 1220, cartaNum);
+            cartas[outra].promessa = setTimeout(deselecionarCarta, 1220, outra);
+            if (contarViradas() === 0) {
+                setTimeout(fimDeJogo, 220);
+            }
         }
         else {
-            setTimeout(comecarVirar, 1220, outra);
-            setTimeout(comecarVirar, 1220, cartaNum);
+            cartas[cartaNum].estado = "virada";
+            cartas[outra].estado = "virada";
+            cartas[cartaNum].promessa = setTimeout(comecarVirar, 1220, cartaNum);
+            cartas[outra].promessa = setTimeout(comecarVirar, 1220, outra);
         }
     }
 }
@@ -96,12 +106,11 @@ function terminarDesvirar (cartaNum) {
 function comecarVirar (cartaNum) {
     const cartaDiv = document.querySelectorAll(".carta")[cartaNum];
     cartaDiv.classList.add("virando");
-    setTimeout(terminarVirar, 220, cartaNum);
+    cartas[cartaNum].promessa = setTimeout(terminarVirar, 220, cartaNum);
 }
 
 function terminarVirar (cartaNum) {
     const cartaDiv = document.querySelectorAll(".carta")[cartaNum];
-    cartas[cartaNum].estado = "virada";
     cartaDiv.innerHTML = `<img src="${cartaCostas}" />`;
     cartaDiv.classList.remove("virando");
     cartaDiv.classList.remove("selecionada");
@@ -110,7 +119,6 @@ function terminarVirar (cartaNum) {
 
 function deselecionarCarta (cartaNum) {
     const cartaDiv = document.querySelectorAll(".carta")[cartaNum];
-    cartas[cartaNum].estado = "desvirada";
     cartaDiv.classList.remove("selecionada");
 }
 // Funções ligadas ao clicar as cartas ////////////////////////////////////////////////////////////
@@ -129,11 +137,6 @@ function checarOutraSelecionada (num) {
     return outra;
 }
 
-function podeSelecionar () {
-    const total = document.querySelectorAll(".carta.selecionada").length;
-    return total <= 1;
-}
-
 function contarViradas () {
     let total = 0;
     for (let i = 0; i < cartas.length; i++) {
@@ -142,6 +145,10 @@ function contarViradas () {
         }
     }
     return total;
+}
+
+function fimDeJogo () {
+    alert(`Você ganhou com ${numeroDeJogadas} jogadas!`);
 }
 // Funções de suporte /////////////////////////////////////////////////////////////////////////////
 
