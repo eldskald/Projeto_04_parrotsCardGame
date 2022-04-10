@@ -16,6 +16,7 @@ body {
     font-weight: bold;
     color: #45968b;
     text-shadow: 4px 4px 4px #929292;
+    text-align: center;
 
     margin: 40px 0px;
 }
@@ -34,7 +35,7 @@ body {
 .carta {
     width: 116px;
     height: 152px;
-    margin: 48px 16px;
+    margin: 24px 16px;
 
     padding: 16px;
     display: flex;
@@ -73,4 +74,57 @@ body {
     font-weight: bold;
     color: #28554f;
     text-align: center;
+}
+
+@media (max-width: 1024px) {
+
+    .container {
+        width: 100%;
+    }
+}
+
+@media (max-width: 614px) {
+
+    .titulo {
+        font-size: 42px;
+        margin: 16px 0px;
+    }
+
+    .container {
+        height: auto;
+        position: absolute;
+        top: 128px;
+        bottom: 0px;
+        margin: 0px;
+
+        flex-wrap: nowrap;
+        flex-direction: column;
+        justify-content: start;
+        overflow: scroll;
+    }
+
+    .carta {
+        min-width: 142px;
+        min-height: 200px;
+        width: 142px;
+        height: 200px;
+    }
+
+    .virada:hover, .selecionada {
+        transform: scale(1, 1);
+    }
+
+    .virando {
+        transform: scale(0, 1);
+    }
+
+    .contador {
+        width: 64px;
+        height: 32px;
+        top: 92px;
+        right: 16px;
+
+        font-size: 24px;
+        text-align: end;
+    }
 }
