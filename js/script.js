@@ -12,13 +12,15 @@ let numeroDeJogadas = 0;
 
 // Funções ligadas a gerar o jogo /////////////////////////////////////////////////////////////////
 function iniciarJogo () {
+    container.innerHTML = "";
+    cartas = [];
+    numeroDeJogadas = 0;
+
     let totalCartas = prompt("Com quantas cartas quer jogar?");
     while (!(totalCartas >= 4 && totalCartas <= 14 && totalCartas % 2 == 0)) {
         alert("Apenas números pares de 4 a 14 são válidos.");
         totalCartas = prompt("Com quantas cartas quer jogar?");
     }
-
-    numeroDeJogadas = 0;
     gerarCartas(totalCartas);
     renderizarJogo();
 }
@@ -40,7 +42,6 @@ function comparador() {
 }
 
 function renderizarJogo () {
-    container.innerHTML = "";
     for (let i = 0; i < cartas.length; i++) {
         renderizarCarta(cartas[i]);
     }
@@ -149,6 +150,14 @@ function contarViradas () {
 
 function fimDeJogo () {
     alert(`Você ganhou com ${numeroDeJogadas} jogadas!`);
+    let resposta = prompt("Jogar novamente?");
+    while (resposta !== "sim" && resposta !== "não") {
+        alert("Responda com 'sim' ou 'não', minúsculo e acentuação correta.");
+        resposta = prompt("Jogar novamente?");
+    }
+    if (resposta === "sim") {
+        iniciarJogo();
+    }
 }
 // Funções de suporte /////////////////////////////////////////////////////////////////////////////
 
